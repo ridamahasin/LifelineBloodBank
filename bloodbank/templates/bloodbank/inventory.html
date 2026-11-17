@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blood Inventory | Lifeline</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #fff5f5;
+            color: #333;
+        }
+
+        header {
+            background: #b71c1c;
+            color: white;
+            padding: 22px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin-bottom: 8px;
+        }
+
+        nav {
+            background: white;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 2px 5px #ddd;
+        }
+
+        nav a {
+            color: #b71c1c;
+            text-decoration: none;
+            font-weight: bold;
+            margin: 0 15px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 35px auto;
+            padding: 20px;
+        }
+
+        .heading {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .heading h2 {
+            color: #b71c1c;
+            margin-bottom: 10px;
+        }
+
+        .blood-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .blood-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 4px 12px #00000012;
+            border-top: 5px solid #c62828;
+        }
+
+        .blood-type {
+            font-size: 35px;
+            font-weight: bold;
+            color: #c62828;
+            margin-bottom: 15px;
+        }
+
+        .units {
+            font-size: 18px;
+            margin-bottom: 12px;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 7px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .available {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .unavailable {
+            background: #ffebee;
+            color: #c62828;
+        }
+        .search-section {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.search-section input {
+    width: 100%;
+    max-width: 400px;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    outline: none;
+}
+
+.search-section input:focus {
+    border-color: #b71c1c;
+    box-shadow: 0 0 5px #b71c1c33;
+}
+
+        footer {
+            margin-top: 40px;
+            background: #b71c1c;
+            color: white;
+            text-align: center;
+            padding: 18px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                margin: 15px auto;
+                padding: 15px;
+            }
+
+            nav a {
+                display: inline-block;
+                margin: 5px 8px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>❤️ Lifeline Blood Bank</h1>
+        <p>Every Drop Counts. Every Life Matters.</p>
+    </header>
+
+    <nav>
+        <a href="/">Home</a>
+        <a href="/dashboard/">Dashboard</a>
+        <a href="/bloodbank/inventory/">Blood Inventory</a>
+    </nav>
+
+    <main class="container">
+
+        <section class="heading">
+            <h2>Blood Availability</h2>
+            <p>Check the available units for each blood group.</p>
+        </section>
+        <section class="search-section">
+    <input
+        type="text"
+        id="bloodSearch"
+        placeholder="Search blood group (e.g., A+, O-)"
+        onkeyup="searchBloodGroups()"
+    >
+</section>
+
+        <section class="blood-grid">
+
+            {% for blood in blood_groups %}
+                <div class="blood-card" data-blood-group="{{ blood.blood_group }}">
+
+                    <div class="blood-type">
+                        {{ blood.blood_group }}
+                    </div>
+
+                    <p class="units">
+                        {{ blood.units_available }} units
+                    </p>
+
+                    {% if blood.units_available > 0 %}
+                        <span class="status available">
+                            Available
+                        </span>
+                    {% else %}
+                        <span class="status unavailable">
+                            Currently Unavailable
+                        </span>
+                    {% endif %}
+
+                </div>
+            {% empty %}
+                <p>No blood inventory records found.</p>
+            {% endfor %}
+
+        </section>
+
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Lifeline Blood Bank Management System</p>
+    </footer>
+    <script>
+    function searchBloodGroups() {
+        const searchValue = document.getElementById("bloodSearch").value
+            .trim()
+            .toUpperCase();
+
+        const bloodCards = document.querySelectorAll(".blood-card");
+
+        bloodCards.forEach(function(card) {
+            const bloodGroup = card.dataset.bloodGroup.toUpperCase();
+
+            if (bloodGroup.includes(searchValue)) {
+                card.style.display = "block";
+            } else {
+                card.style.display = "none";
+            }
+        });
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Blood Requests | Lifeline</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #fff5f5;
+            color: #333;
+        }
+
+        header {
+            background: #b71c1c;
+            color: white;
+            padding: 22px;
+            text-align: center;
+        }
+
+        nav {
+            background: white;
+            padding: 15px;
+            text-align: center;
+        }
+
+        nav a {
+            color: #b71c1c;
+            text-decoration: none;
+            font-weight: bold;
+            margin: 0 12px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 35px auto;
+            padding: 20px;
+        }
+
+        h2 {
+            color: #b71c1c;
+            margin-bottom: 12px;
+        }
+
+        .description {
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px #00000012;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 850px;
+        }
+
+        th, td {
+            padding: 13px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        th {
+            background: #ffebee;
+            color: #b71c1c;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .approved {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .rejected {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .fulfilled {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .empty {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            line-height: 1.6;
+        }
+        
+.filter-section {
+    background: white;
+    padding: 22px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px #00000012;
+    margin: 25px 0;
+}
+
+.filter-section h3 {
+    color: #b71c1c;
+    margin-bottom: 15px;
+}
+
+.filter-form {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 15px;
+    align-items: end;
+}
+
+.filter-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 7px;
+    font-size: 14px;
+}
+
+.filter-group input,
+.filter-group select {
+    width: 100%;
+    padding: 11px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    background: white;
+}
+
+.filter-buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.filter-btn,
+.reset-btn {
+    display: inline-block;
+    padding: 11px 18px;
+    border: none;
+    border-radius: 6px;
+    text-decoration: none;
+    text-align: center;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.filter-btn {
+    background: #b71c1c;
+    color: white;
+}
+
+.reset-btn {
+    background: #eee;
+    color: #333;
+}
+
+.filter-btn:hover {
+    background: #8e0000;
+}
+
+.reset-btn:hover {
+    background: #ddd;
+}
+
+.results-info {
+    margin: 18px 0;
+    color: #555;
+}
+
+        .stats-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin: 25px 0;
+}
+
+.stat-card {
+    background: white;
+    padding: 25px 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px #00000012;
+    border-left: 5px solid #777;
+}
+
+.stat-card h3 {
+    font-size: 16px;
+    margin-bottom: 15px;
+}
+
+.stat-card p {
+    font-size: 32px;
+    font-weight: bold;
+}
+
+.pending-card {
+    border-left-color: #d97706;
+}
+
+.pending-card p {
+    color: #d97706;
+}
+
+.approved-card {
+    border-left-color: #2563eb;
+}
+
+.approved-card p {
+    color: #2563eb;
+}
+
+.fulfilled-card {
+    border-left-color: #16a34a;
+}
+
+.fulfilled-card p {
+    color: #16a34a;
+}
+
+.rejected-card {
+    border-left-color: #dc2626;
+}
+
+.rejected-card p {
+    color: #dc2626;
+}
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            color: #777;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>🏥 Lifeline Blood Bank</h1>
+        <p>Hospital Staff — Patient Blood Requests</p>
+    </header>
+
+    <nav>
+        <a href="/">Home</a>
+        <a href="/dashboard/">Dashboard</a>
+        <a href="/bloodbank/inventory/">Blood Inventory</a>
+        <a href="{% url 'logout' %}">Logout</a>
+    </nav>
+
+    <main class="container">
+
+        <h2>Patient Blood Requests</h2>
+
+        <p class="description">
+            Review patient requests and check their current status.
+            Use the admin panel to update request statuses.
+        </p>
+        <div class="stats-container">
+
+    <div class="stat-card pending-card">
+        <h3>Pending Requests</h3>
+        <p>{{ pending_count }}</p>
+    </div>
+
+    <div class="stat-card approved-card">
+        <h3>Approved Requests</h3>
+        <p>{{ approved_count }}</p>
+    </div>
+
+    <div class="stat-card fulfilled-card">
+        <h3>Fulfilled Requests</h3>
+        <p>{{ fulfilled_count }}</p>
+    </div>
+
+    <div class="stat-card rejected-card">
+        <h3>Rejected Requests</h3>
+        <p>{{ rejected_count }}</p>
+    </div>
+
+</div>
+
+        <!-- Search and Filter Section -->
+        <div class="filter-section">
+            <h3>Search and Filter Requests</h3>
+
+            <form method="GET" action="{% url 'hospital_blood_requests' %}" class="filter-form">
+
+                <div class="filter-group">
+                    <label for="search">Patient or Hospital Name</label>
+                    <input
+                        type="text"
+                        id="search"
+                        name="search"
+                        placeholder="Enter a name..."
+                        value="{{ search_query }}"
+                    >
+                </div>
+
+                <div class="filter-group">
+                    <label for="blood_group">Blood Group</label>
+                    <select id="blood_group" name="blood_group">
+                        <option value="">All Blood Groups</option>
+                        <option value="A+" {% if selected_blood_group == "A+" %}selected{% endif %}>A+</option>
+                        <option value="A-" {% if selected_blood_group == "A-" %}selected{% endif %}>A-</option>
+                        <option value="B+" {% if selected_blood_group == "B+" %}selected{% endif %}>B+</option>
+                        <option value="B-" {% if selected_blood_group == "B-" %}selected{% endif %}>B-</option>
+                        <option value="AB+" {% if selected_blood_group == "AB+" %}selected{% endif %}>AB+</option>
+                        <option value="AB-" {% if selected_blood_group == "AB-" %}selected{% endif %}>AB-</option>
+                        <option value="O+" {% if selected_blood_group == "O+" %}selected{% endif %}>O+</option>
+                        <option value="O-" {% if selected_blood_group == "O-" %}selected{% endif %}>O-</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="status">Request Status</label>
+                    <select id="status" name="status">
+                        <option value="">All Statuses</option>
+                        <option value="PENDING" {% if selected_status == "PENDING" %}selected{% endif %}>Pending</option>
+                        <option value="APPROVED" {% if selected_status == "APPROVED" %}selected{% endif %}>Approved</option>
+                        <option value="FULFILLED" {% if selected_status == "FULFILLED" %}selected{% endif %}>Fulfilled</option>
+                        <option value="REJECTED" {% if selected_status == "REJECTED" %}selected{% endif %}>Rejected</option>
+                    </select>
+                </div>
+
+                <div class="filter-buttons">
+                    <button type="submit" class="filter-btn">Filter</button>
+                    <a href="{% url 'hospital_blood_requests' %}" class="reset-btn">Reset</a>
+                </div>
+
+            </form>
+        </div>
+
+        <p class="results-info">
+            Showing {{ blood_requests|length }} request(s).
+        </p>
+
+
+        {% if blood_requests %}
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Patient Name</th>
+                            <th>Blood Group</th>
+                            <th>Units Required</th>
+                            <th>Hospital</th>
+                            <th>Contact</th>
+                            <th>Required Date</th>
+                            <th>Status</th>
+                            <th>Submitted</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for item in blood_requests %}
+                            <tr>
+                                <td>{{ item.patient_name }}</td>
+                                <td>{{ item.blood_group }}</td>
+                                <td>{{ item.units_required }}</td>
+                                <td>{{ item.hospital_name }}</td>
+                                <td>{{ item.contact_number }}</td>
+                                <td>{{ item.required_date|date:"d M Y" }}</td>
+
+                                <td>
+                                    {% if item.status == "PENDING" %}
+                                        <span class="status pending">Pending</span>
+                                    {% elif item.status == "APPROVED" %}
+                                        <span class="status approved">Approved</span>
+                                    {% elif item.status == "REJECTED" %}
+                                        <span class="status rejected">Rejected</span>
+                                    {% elif item.status == "FULFILLED" %}
+                                        <span class="status fulfilled">Fulfilled</span>
+                                    {% else %}
+                                        {{ item.get_status_display }}
+                                    {% endif %}
+                                </td>
+
+                                <td>{{ item.created_at|date:"d M Y" }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+        {% else %}
+
+            <div class="empty">
+                No patient blood requests have been submitted yet.
+            </div>
+
+        {% endif %}
+
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Lifeline Blood Bank Management System</p>
+    </footer>
+
+</body>
+</html>

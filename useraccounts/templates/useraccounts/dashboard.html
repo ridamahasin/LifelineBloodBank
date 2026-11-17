@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | Lifeline Blood Bank</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #fff5f5;
+            color: #333;
+        }
+
+        header {
+            background: #c62828;
+            color: white;
+            padding: 20px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        header h1 {
+            font-size: 24px;
+        }
+
+        header a {
+            color: white;
+            text-decoration: none;
+            margin-left: 18px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .welcome {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.07);
+            margin-bottom: 30px;
+        }
+
+        .welcome h2 {
+            color: #c62828;
+            margin-bottom: 12px;
+        }
+
+        .welcome p {
+            line-height: 1.7;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            border-top: 5px solid #c62828;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.07);
+        }
+
+        .card h3 {
+            color: #c62828;
+            margin-bottom: 12px;
+        }
+
+        .card p {
+            line-height: 1.6;
+        }
+
+        .role {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 7px 12px;
+            background: #ffebee;
+            color: #b71c1c;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        .donations-section {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.07);
+            margin-top: 25px;
+        }
+
+        .donations-section h2 {
+            color: #c62828;
+            margin-bottom: 10px;
+        }
+
+        .donations-section > p {
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .donate-button {
+            display: inline-block;
+            padding: 12px 18px;
+            background: #c62828;
+            color: white;
+            text-decoration: none;
+            border-radius: 7px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .donate-button:hover {
+            background: #b71c1c;
+        }
+
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 550px;
+        }
+
+        th, td {
+            padding: 14px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        th {
+            background: #ffebee;
+            color: #b71c1c;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+/* Blood stock alert labels */
+.stock-status {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.stock-out {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+.stock-low {
+    background: #ffedd5;
+    color: #9a3412;
+}
+
+.stock-available {
+    background: #dcfce7;
+    color: #166534;
+}
+
+
+        .pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .approved {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .completed {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .rejected {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .empty-message {
+            padding: 18px;
+            background: #fff7f7;
+            border-radius: 8px;
+            line-height: 1.7;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            color: #777;
+        }
+
+        @media (max-width: 600px) {
+            header {
+                padding: 20px;
+            }
+
+            header a {
+                margin-left: 0;
+                margin-right: 15px;
+                display: inline-block;
+                margin-bottom: 8px;
+            }
+
+            .container {
+                margin-top: 25px;
+            }
+
+            .donations-section {
+                padding: 18px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>🩸 Lifeline Blood Bank</h1>
+
+        <nav>
+            <a href="/">Home</a>
+            <a href="/dashboard/">Dashboard</a>
+            <a href="/bloodbank/inventory/">Blood Inventory</a>
+            <a href="/donations/request/">Donate Blood</a>
+            <a href="{% url 'logout' %}">Logout</a>
+
+        </nav>
+    </header>
+
+    <main class="container">
+
+        <section class="welcome">
+            <h2>Welcome, {{ request.user.username }}!</h2>
+
+            <p>You are logged in to the Lifeline Blood Bank Management System.</p>
+
+            <span class="role">{{ profile.get_role_display }}</span>
+        </section>
+
+        <section class="cards">
+
+            {% if profile.role == "DONOR" %}
+
+                <div class="card">
+                    <h3>🩸 Donor Profile</h3>
+                    <p>Your donor account is registered. You can submit donation requests and track their status below.</p>
+                </div>
+
+                <div class="card">
+                    <h3>❤️ Help Save Lives</h3>
+                    <p>Blood donation eligibility and collection must be confirmed by qualified blood-bank staff.</p>
+                </div>
+
+            {% elif profile.role == "PATIENT" %}
+
+            
+<div class="card">
+    <h3>🩸 Blood Availability</h3>
+    <p>Check the current stock of different blood groups.</p>
+
+    {% if blood_groups %}
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Blood Group</th>
+                        <th>Available Units</th>
+                        <th>Stock Status</th>
+                    </tr>
+                </thead>
+
+            
+<tbody>
+    {% for blood in blood_groups %}
+        <tr>
+            <td>{{ blood.blood_group }}</td>
+
+            <td>
+                {% if blood.units_available > 0 %}
+                    {{ blood.units_available }} units
+                {% else %}
+                    0 units
+                {% endif %}
+            </td>
+
+            <td>
+                {% if blood.stock_status == "OUT" %}
+                    <span class="stock-status stock-out">
+                        Out of Stock
+                    </span>
+                {% elif blood.stock_status == "LOW" %}
+                    <span class="stock-status stock-low">
+                        Low Stock
+                    </span>
+                {% else %}
+                    <span class="stock-status stock-available">
+                        Available
+                    </span>
+                {% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+</tbody>
+
+            </table>
+        </div>
+    {% else %}
+        <p>No blood inventory records available yet.</p>
+    {% endif %}
+
+    <br>
+
+    <a href="{% url 'inventory' %}" class="donate-button">
+        View Full Inventory
+    </a>
+</div>
+
+
+                <div class="card">
+    <h3>📋 Blood Requests</h3>
+
+    <p>Submit a new blood request or check the status of your existing requests.</p>
+
+    <a href="{% url 'patient_request' %}" class="donate-button">
+        + Request Blood
+    </a>
+
+    <br><br>
+
+    <a href="{% url 'my_blood_requests' %}" class="donate-button">
+        View My Blood Requests
+    </a>
+</div>
+
+            {% elif profile.role == "HOSPITAL" %}
+
+                <div class="card">
+                    <h3>🏥 Hospital Management</h3>
+                    <p>Hospital staff can use the administration system to review donation records.</p>
+                    <a href="/admin/">Open Admin Panel</a>
+                </div>
+                <div class="card">
+    <h3>📋 Patient Blood Requests</h3>
+    <p>View all patient blood requests, check their statuses, and track blood requirements.</p>
+
+    <a href="{% url 'hospital_blood_requests' %}" class="donate-button">
+        View Patient Requests
+    </a>
+</div>
+
+                <div class="card">
+                    <h3>📦 Blood Stock</h3>
+                    <p>View current blood-group availability.</p>
+                    <a href="/bloodbank/inventory/">View Blood Inventory</a>
+                </div>
+
+            {% endif %}
+
+        </section>
+
+        {% if profile.role == "DONOR" %}
+
+            <section class="donations-section">
+
+                <h2>🩸 My Donation Requests</h2>
+
+                <p>Track your submitted donation requests and their current status.</p>
+
+                <a href="/donations/request/" class="donate-button">
+                    + Submit New Request
+                </a>
+
+                {% if donations %}
+
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Blood Group</th>
+                                    <th>Age</th>
+                                    <th>Donation Date</th>
+                                    <th>Status</th>
+                                    <th>Submitted On</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {% for donation in donations %}
+                                    <tr>
+                                        <td>{{ donation.blood_group }}</td>
+                                        <td>{{ donation.age }}</td>
+                                        <td>{{ donation.donation_date|date:"d M Y" }}</td>
+                                        <td>
+                                            {% if donation.status == "PENDING" %}
+                                                <span class="status pending">Pending</span>
+                                            {% elif donation.status == "APPROVED" %}
+                                                <span class="status approved">Approved</span>
+                                            {% elif donation.status == "COMPLETED" %}
+                                                <span class="status completed">Completed</span>
+                                            {% elif donation.status == "REJECTED" %}
+                                                <span class="status rejected">Rejected</span>
+                                            {% else %}
+                                                <span class="status">{{ donation.get_status_display }}</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>{{ donation.created_at|date:"d M Y" }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                {% else %}
+
+                    <div class="empty-message">
+                        You haven't submitted any donation requests yet.
+                        Click "Submit New Request" to get started.
+                    </div>
+
+                {% endif %}
+
+            </section>
+
+        {% endif %}
+
+    </main>
+
+    <footer>
+        <p>© 2026 Lifeline Blood Bank Management System</p>
+    </footer>
+
+</body>
+</html>

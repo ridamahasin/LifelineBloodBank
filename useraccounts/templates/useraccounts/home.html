@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lifeline Blood Bank</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #fff7f7;
+            color: #333;
+        }
+
+        nav {
+            background: white;
+            padding: 20px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        .logo {
+            color: #c1121f;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #333;
+            margin-left: 20px;
+            font-weight: bold;
+        }
+
+        .hero {
+            min-height: 75vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #ffe4e6, #fff7f7);
+        }
+
+        .hero h1 {
+            color: #b91c1c;
+            font-size: clamp(32px, 5vw, 52px);
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            max-width: 650px;
+            line-height: 1.8;
+            color: #555;
+            font-size: 18px;
+            margin-bottom: 30px;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 14px 25px;
+            margin: 8px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            background: #c1121f;
+            color: white;
+        }
+
+        .button.secondary {
+            background: white;
+            color: #c1121f;
+            border: 1px solid #c1121f;
+        }
+
+        .features {
+            padding: 50px 8%;
+            text-align: center;
+        }
+
+        .features h2 {
+            color: #b91c1c;
+            margin-bottom: 30px;
+            font-size: 30px;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            padding: 28px 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+        }
+
+        .card h3 {
+            margin: 12px 0;
+            color: #b91c1c;
+        }
+
+        .card p {
+            line-height: 1.6;
+            color: #666;
+        }
+
+        footer {
+            text-align: center;
+            padding: 22px;
+            background: #991b1b;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <div class="logo">🩸 Lifeline</div>
+
+        <div>
+            <a href="/">Home</a>
+            <a href="/register/">Register</a>
+            <a href="/admin/">Admin</a>
+            <a href="/bloodbank/inventory/">Blood Inventory</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <h1>Every Drop Can Save a Life</h1>
+
+        <p>
+            Welcome to Lifeline Blood Bank Management System.
+            Connect blood donors with people in need and help make
+            life-saving blood easier to find.
+        </p>
+
+       <div>
+    <a href="/register/" class="button">Join Lifeline</a>
+    <a href="/donations/request/" class="button">Donate Blood</a>
+    <a href="#features" class="button secondary">Explore Services</a>
+</div>
+    </section>
+
+    <section class="features" id="features">
+        <h2>Our Services</h2>
+
+        <div class="cards">
+            <div class="card">
+                <div style="font-size: 35px;">🩸</div>
+                <h3>Become a Donor</h3>
+                <p>Register as a donor and help people who need blood.</p>
+            </div>
+
+            <div class="card">
+                <div style="font-size: 35px;">🏥</div>
+                <h3>Request Blood</h3>
+                <p>Our system will help connect blood requests with available services.</p>
+            </div>
+
+            <div class="card">
+                <div style="font-size: 35px;">❤️</div>
+                <h3>Save Lives</h3>
+                <p>Support your community by helping make blood donation accessible.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 Lifeline Blood Bank Management System</p>
+    </footer>
+</body>
+</html>
